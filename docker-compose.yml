@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  api-suttungr:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: api-suttungr
+    depends_on:
+      - db-suttungr
+    entrypoint: sh -c 'yarn install --frozen-lockfile && yarn start:dev'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - suttungr-net
+
+  db-suttungr:
+    container_name: db-suttungr
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db-suttungr-data:/var/lib/postgresql/data
+    ports:
+      - ${PG_PORT}:${PG_PORT}
+    networks:
+      - suttungr-net
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: nginx
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+    expose:
+      - ${NGINX_PORT}
+    networks:
+      - suttungr-net
+    links:
+      - api-suttungr
+
+networks:
+  suttungr-net:
+
+volumes:
+  db-suttungr-data:
