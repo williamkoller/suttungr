@@ -4,11 +4,15 @@ WORKDIR /app
 
 RUN mkdir -p /app
 
+RUN apk add openssl1.1-compat openssl
+
 COPY . /app
+
 
 RUN yarn cache clean \ 
   rm node_modules/ \
-  yarn install --frozen-lockfile
+  yarn install --frozen-lockfile \
+  yarn prisma generate
 
 COPY . .
 

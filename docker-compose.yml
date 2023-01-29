@@ -7,7 +7,9 @@ services:
     container_name: api-suttungr
     depends_on:
       - db-suttungr
-    entrypoint: sh -c 'yarn install --frozen-lockfile && yarn start:dev'
+    entrypoint: sh -c 'yarn install --frozen-lockfile && yarn prisma generate && yarn start:dev'
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
     volumes:
       - .:/app
       - /app/node_modules
