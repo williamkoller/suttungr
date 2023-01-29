@@ -1,12 +1,18 @@
 import { Prisma, User } from '@prisma/client';
 import { BaseRepositoryInterface } from '@app/data/protocols/database/base/base.repository.interface';
 import { PrismaService as DbInstance } from '@app/infra/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserRepository implements BaseRepositoryInterface<User> {
   constructor(private readonly db: DbInstance) {}
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
-    return await this.db.user.create({ data });
+    const newUser = {
+      ...data,
+      email: data.email.toLowerCase(),
+    };
+    return await this.db.user.create({ data: newUser });
   }
 
   async find(): Promise<User[]> {
