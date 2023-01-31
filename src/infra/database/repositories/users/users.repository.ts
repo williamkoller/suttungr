@@ -4,10 +4,10 @@ import { PrismaService as DbInstance } from '@app/infra/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserRepository implements BaseRepositoryInterface<User> {
+export class UsersRepository implements BaseRepositoryInterface<User> {
   constructor(private readonly db: DbInstance) {}
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
+  async insert(data: Prisma.UserCreateInput): Promise<User> {
     const newUser = {
       ...data,
       email: data.email.toLowerCase(),
