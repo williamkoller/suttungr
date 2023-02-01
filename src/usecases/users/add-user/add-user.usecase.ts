@@ -3,7 +3,7 @@ import { UsersRepository } from '@app/infra/database/repositories/users/users.re
 import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
 import { LoggerService } from '@app/infra/logger/logger.service';
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -20,7 +20,6 @@ export class AddUserUseCase {
     if (verifyUserExists) {
       this.exceptionsService.conflictException({
         message: `There is a user with that email: ${verifyUserExists.email}`,
-        codeError: HttpStatus.CONFLICT,
       });
     }
 
