@@ -24,7 +24,7 @@ export class UsersRepository implements BaseRepositoryInterface<User> {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return await this.db.user.findFirst({ where: { email } });
+    return await this.db.user.findUnique({ where: { email } });
   }
 
   async update(id: number, data: Prisma.UserUpdateInput): Promise<User> {

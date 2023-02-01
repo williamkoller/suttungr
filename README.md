@@ -29,3 +29,15 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Create Module
+
+```bash
+nest g mo <path>
+```
+
+## Create Service
+
+```bash
+nest g s <path>
+```

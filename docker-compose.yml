@@ -25,6 +25,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_HOST: ${POSTGRES_HOST}
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - db-suttungr-data:/var/lib/postgresql/data
