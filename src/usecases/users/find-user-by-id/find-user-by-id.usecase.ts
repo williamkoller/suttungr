@@ -8,27 +8,27 @@ import {
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FindUsersUseCase {
+export class FindUserByIdUseCase {
   constructor(
     private readonly usersRepo: UsersRepository,
     private readonly loggerService: LoggerService,
     private readonly exceptionsService: ExceptionsService,
   ) {}
 
-  async execute(): Promise<ResponseUserType[]> {
-    const users = await this.usersRepo.find();
+  async execute(id: number): Promise<ResponseUserType> {
+    const verifyUserExists = await this.usersRepo.findById(id);
 
-    if (!users.length) {
+    if (!verifyUserExists) {
       this.exceptionsService.notFoundException({
-        message: 'No record found',
+        message: `User not found this id: ${id}`,
       });
     }
 
     this.loggerService.log(
-      `FindUsersUseCase`,
-      `users: ${JSON.stringify(users)}`,
+      `FindUserByIdUseCase`,
+      `verifyUserExists: ${JSON.stringify(verifyUserExists)}`,
     );
 
-    return UsersMapper.toUsers(users);
+    return UsersMapper.toUser(verifyUserExists);
   }
 }

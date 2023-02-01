@@ -1,34 +1,32 @@
 import { UsersRepository } from '@app/infra/database/repositories/users/users.repository';
 import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
 import { LoggerService } from '@app/infra/logger/logger.service';
-import {
-  ResponseUserType,
-  UsersMapper,
-} from '@app/presentation/mappers/users/users.mapper';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class FindUsersUseCase {
+export class DeleteUserUseCase {
   constructor(
     private readonly usersRepo: UsersRepository,
     private readonly loggerService: LoggerService,
     private readonly exceptionsService: ExceptionsService,
   ) {}
 
-  async execute(): Promise<ResponseUserType[]> {
-    const users = await this.usersRepo.find();
+  async execute(id: number): Promise<void> {
+    const verifyUserExists = await this.usersRepo.findById(id);
 
-    if (!users.length) {
+    if (!verifyUserExists) {
       this.exceptionsService.notFoundException({
-        message: 'No record found',
+        message: `User not found this id: ${id}`,
       });
     }
 
     this.loggerService.log(
-      `FindUsersUseCase`,
-      `users: ${JSON.stringify(users)}`,
+      `DeleteUserUseCase`,
+      `deleted user by id: ${JSON.stringify(
+        verifyUserExists.id,
+      )} with successfully: `,
     );
 
-    return UsersMapper.toUsers(users);
+    await this.usersRepo.delete(id);
   }
 }
