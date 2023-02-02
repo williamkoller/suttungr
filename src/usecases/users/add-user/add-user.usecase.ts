@@ -1,5 +1,5 @@
 import { BcryptService } from '@app/infra/cryptography/bcrypt/bcrypt.service';
-import { UsersRepository } from '@app/infra/database/repositories/users/users.repository';
+import { UsersRepository } from '@app/infra/database/repositories/prisma/users/users.repository';
 import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
 import { LoggerService } from '@app/infra/logger/logger.service';
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';

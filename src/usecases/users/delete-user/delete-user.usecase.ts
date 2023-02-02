@@ -1,4 +1,4 @@
-import { UsersRepository } from '@app/infra/database/repositories/users/users.repository';
+import { UsersRepository } from '@app/infra/database/repositories/prisma/users/users.repository';
 import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
 import { LoggerService } from '@app/infra/logger/logger.service';
 import { Injectable } from '@nestjs/common';
