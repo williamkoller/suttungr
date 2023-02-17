@@ -24,7 +24,7 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
 
   const config = app.get<ConfigService>(ConfigService);
-  const port = config.get<number>('PORT');
+  const port = config.get<number>('NGINX_PORT');
 
   await app.listen(port, () => logger.log(`Server listening at: ${port}`));
 }

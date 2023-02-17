@@ -1,7 +1,7 @@
-import { BcryptService } from '@app/infra/cryptography/bcrypt/bcrypt.service';
-import { UsersRepository } from '@app/infra/database/repositories/prisma/users/users.repository';
-import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
-import { LoggerService } from '@app/infra/logger/logger.service';
+import { UsersRepositoryInterface } from '@app/data/protocols/database/user/user.repository.interface';
+import { BcryptInterface } from '@app/domain/criptography/bcrypt.interface';
+import { ExceptionInterface } from '@app/domain/exceptions/exception.interface';
+import { LoggerInterface } from '@app/domain/logger/logger.interface';
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
@@ -9,13 +9,15 @@ import { User } from '@prisma/client';
 @Injectable()
 export class AddUserUseCase {
   constructor(
-    private readonly usersRepo: UsersRepository,
-    private readonly bcryptService: BcryptService,
-    private readonly loggerService: LoggerService,
-    private readonly exceptionsService: ExceptionsService,
+    private readonly usersRepo: UsersRepositoryInterface,
+    private readonly bcryptService: BcryptInterface,
+    private readonly loggerService: LoggerInterface,
+    private readonly exceptionsService: ExceptionInterface,
   ) {}
   async execute(data: CreateUserDTO): Promise<User> {
-    const verifyUserExists = await this.usersRepo.findByEmail(data.email);
+    const verifyUserExists = await this.usersRepo.findByEmail(
+      data.email.toLowerCase(),
+    );
 
     if (verifyUserExists) {
       this.exceptionsService.conflictException({
@@ -25,6 +27,7 @@ export class AddUserUseCase {
 
     const newUser = {
       ...data,
+      email: data.email.toLowerCase(),
       password: await this.bcryptService.hash(data.password),
     };
 
@@ -33,6 +36,6 @@ export class AddUserUseCase {
       `newUser: ${JSON.stringify(newUser)}`,
     );
 
-    return await this.usersRepo.insert(newUser);
+    return await this.usersRepo.insert(newUser as User);
   }
 }
