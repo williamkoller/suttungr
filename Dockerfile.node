@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN mkdir -p /app
 
-RUN apk add openssl1.1-compat openssl
+RUN apk add openssl1.1-compat openssl \ yarn global add @nestjs/cli
 
 COPY . /app
 
