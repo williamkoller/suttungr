@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v1
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn
 
       - name: Run The Tests
         run: yarn test
