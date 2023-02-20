@@ -1,6 +1,6 @@
-import { UsersRepository } from '@app/infra/database/repositories/prisma/users/users.repository';
-import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
-import { LoggerService } from '@app/infra/logger/logger.service';
+import { UsersRepositoryInterface } from '@app/data/protocols/database/user/user.repository.interface';
+import { ExceptionInterface } from '@app/domain/exceptions/exception.interface';
+import { LoggerInterface } from '@app/domain/logger/logger.interface';
 import {
   ResponseUserType,
   UsersMapper,
@@ -10,24 +10,21 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class FindUsersUseCase {
   constructor(
-    private readonly usersRepo: UsersRepository,
-    private readonly loggerService: LoggerService,
-    private readonly exceptionsService: ExceptionsService,
+    private readonly usersRepo: UsersRepositoryInterface,
+    private readonly logger: LoggerInterface,
+    private readonly exception: ExceptionInterface,
   ) {}
 
   async execute(): Promise<ResponseUserType[]> {
     const users = await this.usersRepo.find();
 
     if (!users.length) {
-      this.exceptionsService.notFoundException({
+      this.exception.notFoundException({
         message: 'No record found',
       });
     }
 
-    this.loggerService.log(
-      `FindUsersUseCase`,
-      `users: ${JSON.stringify(users)}`,
-    );
+    this.logger.log(`FindUsersUseCase`, `users: ${JSON.stringify(users)}`);
 
     return UsersMapper.toUsers(users);
   }

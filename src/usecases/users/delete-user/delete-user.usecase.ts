@@ -1,26 +1,26 @@
-import { UsersRepository } from '@app/infra/database/repositories/prisma/users/users.repository';
-import { ExceptionsService } from '@app/infra/exceptions/exceptions.service';
-import { LoggerService } from '@app/infra/logger/logger.service';
+import { UsersRepositoryInterface } from '@app/data/protocols/database/user/user.repository.interface';
+import { ExceptionInterface } from '@app/domain/exceptions/exception.interface';
+import { LoggerInterface } from '@app/domain/logger/logger.interface';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DeleteUserUseCase {
   constructor(
-    private readonly usersRepo: UsersRepository,
-    private readonly loggerService: LoggerService,
-    private readonly exceptionsService: ExceptionsService,
+    private readonly usersRepo: UsersRepositoryInterface,
+    private readonly logger: LoggerInterface,
+    private readonly exception: ExceptionInterface,
   ) {}
 
   async execute(id: number): Promise<void> {
     const verifyUserExists = await this.usersRepo.findById(id);
 
     if (!verifyUserExists) {
-      this.exceptionsService.notFoundException({
+      this.exception.notFoundException({
         message: `User not found this id: ${id}`,
       });
     }
 
-    this.loggerService.log(
+    this.logger.log(
       `DeleteUserUseCase`,
       `deleted user by id: ${JSON.stringify(
         verifyUserExists.id,
