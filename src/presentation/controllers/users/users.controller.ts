@@ -1,5 +1,6 @@
 import { CreateUserOutputDTO } from '@app/presentation/dtos/user/create-user-output.dto';
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';
+import { JwtAuthGuard } from '@app/presentation/guards/jwt-auth.guard';
 import { ResponseUserType } from '@app/presentation/mappers/users/users.mapper';
 import { AddUserUseCase } from '@app/usecases/users/add-user/add-user.usecase';
 import { DeleteUserUseCase } from '@app/usecases/users/delete-user/delete-user.usecase';
@@ -15,6 +16,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -194,6 +196,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete user by id.',

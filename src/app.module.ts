@@ -6,6 +6,7 @@ import { ExceptionsModule } from './infra/exceptions/exceptions.module';
 import { LoggerModule } from './infra/logger/logger.module';
 import { EnvironmentModule } from './infra/config/environment/environment.module';
 import { CryptographyModule } from './infra/cryptography/cryptography.module';
+import { AuthModule } from './infra/ioc/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CryptographyModule } from './infra/cryptography/cryptography.module';
     LoggerModule,
     EnvironmentModule,
     CryptographyModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
