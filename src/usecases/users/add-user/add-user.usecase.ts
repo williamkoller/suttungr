@@ -10,9 +10,9 @@ import { User } from '@prisma/client';
 export class AddUserUseCase {
   constructor(
     private readonly usersRepo: UsersRepositoryInterface,
-    private readonly bcryptService: BcryptInterface,
-    private readonly loggerService: LoggerInterface,
-    private readonly exceptionsService: ExceptionInterface,
+    private readonly bcrypt: BcryptInterface,
+    private readonly logger: LoggerInterface,
+    private readonly exception: ExceptionInterface,
   ) {}
   async execute(data: CreateUserDTO): Promise<User> {
     const verifyUserExists = await this.usersRepo.findByEmail(
@@ -20,7 +20,7 @@ export class AddUserUseCase {
     );
 
     if (verifyUserExists) {
-      this.exceptionsService.conflictException({
+      this.exception.conflictException({
         message: `There is a user with that email: ${verifyUserExists.email}`,
       });
     }
@@ -28,13 +28,10 @@ export class AddUserUseCase {
     const newUser = {
       ...data,
       email: data.email.toLowerCase(),
-      password: await this.bcryptService.hash(data.password),
+      password: await this.bcrypt.hash(data.password),
     };
 
-    this.loggerService.log(
-      `AddUserUseCase`,
-      `newUser: ${JSON.stringify(newUser)}`,
-    );
+    this.logger.log(`AddUserUseCase`, `newUser: ${JSON.stringify(newUser)}`);
 
     return await this.usersRepo.insert(newUser as User);
   }

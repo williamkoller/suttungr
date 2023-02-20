@@ -30,9 +30,6 @@ import { PrismaService } from '../prisma/prisma.service';
   controllers: [UsersController],
   providers: [
     PrismaService,
-    FindUsersUseCase,
-    FindUserByIdUseCase,
-    DeleteUserUseCase,
     {
       provide: AddUserUseCase,
       useFactory(
@@ -49,6 +46,39 @@ import { PrismaService } from '../prisma/prisma.service';
         LoggerService,
         ExceptionsService,
       ],
+    },
+    {
+      provide: FindUsersUseCase,
+      useFactory(
+        usersRepo: UsersRepositoryInterface,
+        logger: LoggerInterface,
+        exception: ExceptionInterface,
+      ) {
+        return new FindUsersUseCase(usersRepo, logger, exception);
+      },
+      inject: [UsersRepository, LoggerService, ExceptionsService],
+    },
+    {
+      provide: FindUserByIdUseCase,
+      useFactory(
+        usersRepo: UsersRepositoryInterface,
+        logger: LoggerInterface,
+        exception: ExceptionInterface,
+      ) {
+        return new FindUserByIdUseCase(usersRepo, logger, exception);
+      },
+      inject: [UsersRepository, LoggerService, ExceptionsService],
+    },
+    {
+      provide: DeleteUserUseCase,
+      useFactory(
+        usersRepo: UsersRepositoryInterface,
+        logger: LoggerInterface,
+        exception: ExceptionInterface,
+      ) {
+        return new DeleteUserUseCase(usersRepo, logger, exception);
+      },
+      inject: [UsersRepository, LoggerService, ExceptionsService],
     },
   ],
 })

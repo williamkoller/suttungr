@@ -4,12 +4,15 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './infra/common/filters/all-exception.filter';
+import { swagger } from './infra/docs/swagger/swagger';
 import { LoggerService } from './infra/logger/logger.service';
 import { PrismaService } from './infra/prisma/prisma.service';
 
 async function bootstrap() {
   const logger = new Logger('Main');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  swagger(app);
 
   app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
 
