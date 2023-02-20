@@ -27,6 +27,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
@@ -227,6 +228,19 @@ export class UsersController {
           timestamp: '2023-02-20T15:18:51.944Z',
           path: '/users',
           message: 'User not found this id.',
+        },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized user.',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 401,
+          timestamp: '2023-02-20T21:51:41.389Z',
+          path: '/users/15',
+          message: 'Unauthorized',
         },
       },
     },
