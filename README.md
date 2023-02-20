@@ -1,7 +1,7 @@
-## Installation
+# Installation
 
 ```bash
-$ yarn install
+yarn install
 ```
 
 ## Running the app
@@ -40,4 +40,10 @@ nest g mo <path>
 
 ```bash
 nest g s <path>
+```
+
+## Running migrate
+
+```bash
+yarn prisma migrate dev
 ```

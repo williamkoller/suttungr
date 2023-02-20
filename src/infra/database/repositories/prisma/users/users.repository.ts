@@ -8,7 +8,11 @@ export class UsersRepository implements UsersRepositoryInterface {
   constructor(private readonly db: DbInstance) {}
 
   async insert(data: Prisma.UserCreateInput): Promise<User> {
-    return await this.db.user.create({ data });
+    const newUser = {
+      ...data,
+      active: true,
+    };
+    return await this.db.user.create({ data: newUser });
   }
 
   async find(): Promise<User[]> {
