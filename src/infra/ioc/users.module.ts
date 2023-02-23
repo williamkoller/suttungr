@@ -7,6 +7,7 @@ import { AddUserUseCase } from '@app/usecases/users/add-user/add-user.usecase';
 import { DeleteUserUseCase } from '@app/usecases/users/delete-user/delete-user.usecase';
 import { FindUserByIdUseCase } from '@app/usecases/users/find-user-by-id/find-user-by-id.usecase';
 import { FindUsersUseCase } from '@app/usecases/users/find-users/find-users.usecase';
+import { UpdateUserUseCase } from '@app/usecases/users/update-user/update-user.usecase';
 import { Module } from '@nestjs/common';
 import { BcryptService } from '../cryptography/bcrypt/bcrypt.service';
 import { CryptographyModule } from '../cryptography/cryptography.module';
@@ -79,6 +80,23 @@ import { PrismaService } from '../prisma/prisma.service';
         return new DeleteUserUseCase(usersRepo, logger, exception);
       },
       inject: [UsersRepository, LoggerService, ExceptionsService],
+    },
+    {
+      provide: UpdateUserUseCase,
+      useFactory(
+        usersRepo: UsersRepositoryInterface,
+        bcrypt: BcryptInterface,
+        logger: LoggerInterface,
+        exception: ExceptionInterface,
+      ) {
+        return new UpdateUserUseCase(usersRepo, bcrypt, logger, exception);
+      },
+      inject: [
+        UsersRepository,
+        BcryptService,
+        LoggerService,
+        ExceptionsService,
+      ],
     },
   ],
 })

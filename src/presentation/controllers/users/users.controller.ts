@@ -1,11 +1,13 @@
 import { CreateUserOutputDTO } from '@app/presentation/dtos/user/create-user-output.dto';
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';
+import { UpdateUserDTO } from '@app/presentation/dtos/user/update-user.dto';
 import { JwtAuthGuard } from '@app/presentation/guards/jwt-auth.guard';
 import { ResponseUserType } from '@app/presentation/mappers/users/users.mapper';
 import { AddUserUseCase } from '@app/usecases/users/add-user/add-user.usecase';
 import { DeleteUserUseCase } from '@app/usecases/users/delete-user/delete-user.usecase';
 import { FindUserByIdUseCase } from '@app/usecases/users/find-user-by-id/find-user-by-id.usecase';
 import { FindUsersUseCase } from '@app/usecases/users/find-users/find-users.usecase';
+import { UpdateUserUseCase } from '@app/usecases/users/update-user/update-user.usecase';
 import {
   Body,
   Controller,
@@ -16,6 +18,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -40,6 +43,7 @@ export class UsersController {
     private readonly findUsersUseCase: FindUsersUseCase,
     private readonly findUserByIdUseCase: FindUserByIdUseCase,
     private readonly deleteUserUseCase: DeleteUserUseCase,
+    private readonly updateUserUseCase: UpdateUserUseCase,
   ) {}
 
   @Post()
@@ -89,7 +93,9 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Find all users.',
   })
@@ -142,7 +148,9 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Find user by id.',
   })
@@ -249,5 +257,13 @@ export class UsersController {
   })
   async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.deleteUserUseCase.execute(id);
+  }
+
+  @Put(':id')
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateUserDTO,
+  ) {
+    return await this.updateUserUseCase.execute(id, data);
   }
 }
