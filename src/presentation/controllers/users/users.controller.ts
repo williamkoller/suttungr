@@ -260,6 +260,49 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user.',
+  })
+  @ApiOkResponse({
+    type: CreateUserOutputDTO,
+  })
+  @ApiBadRequestResponse({
+    description: 'This is the type of error, when the request data is empty.',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 400,
+          timestamp: '2023-02-20T15:07:18.182Z',
+          path: '/users',
+          message: [
+            'name should not be empty',
+            'surname should not be empty',
+            'email should not be empty',
+            'Password too weak',
+            'password must be longer than or equal to 8 characters',
+            'password should not be empty',
+          ],
+          error: 'Bad Request',
+        },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized user.',
+    content: {
+      'application/json': {
+        example: {
+          statusCode: 401,
+          timestamp: '2023-02-20T21:51:41.389Z',
+          path: '/users/15',
+          message: 'Unauthorized',
+        },
+      },
+    },
+  })
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateUserDTO,
