@@ -2,6 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserOutputDTO {
   @ApiProperty({
+    example: 2,
+  })
+  id: number;
+
+  @ApiProperty({
     example: 'William',
   })
   name: string;
