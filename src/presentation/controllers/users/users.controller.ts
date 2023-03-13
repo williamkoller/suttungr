@@ -2,7 +2,6 @@ import { CreateUserOutputDTO } from '@app/presentation/dtos/user/create-user-out
 import { CreateUserDTO } from '@app/presentation/dtos/user/create-user.dto';
 import { UpdateUserDTO } from '@app/presentation/dtos/user/update-user.dto';
 import { JwtAuthGuard } from '@app/presentation/guards/jwt-auth.guard';
-import { ResponseUserType } from '@app/presentation/mappers/users/users.mapper';
 import { AddUserUseCase } from '@app/usecases/users/add-user/add-user.usecase';
 import { DeleteUserUseCase } from '@app/usecases/users/delete-user/delete-user.usecase';
 import { FindUserByIdUseCase } from '@app/usecases/users/find-user-by-id/find-user-by-id.usecase';
@@ -143,7 +142,7 @@ export class UsersController {
       },
     },
   })
-  async find(): Promise<ResponseUserType[]> {
+  async find(): Promise<User[]> {
     return await this.findUsersUseCase.execute();
   }
 
@@ -199,9 +198,7 @@ export class UsersController {
       },
     },
   })
-  async findById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ResponseUserType> {
+  async findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return await this.findUserByIdUseCase.execute(id);
   }
 

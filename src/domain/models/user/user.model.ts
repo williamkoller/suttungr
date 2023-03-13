@@ -5,6 +5,6 @@ export class UserModel {
   readonly active: boolean;
   readonly email: string;
   readonly password: string;
-  readonly created_at: Date;
-  readonly updated_at: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 }

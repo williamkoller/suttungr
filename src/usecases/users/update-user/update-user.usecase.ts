@@ -3,7 +3,6 @@ import { BcryptInterface } from '@app/domain/criptography/bcrypt.interface';
 import { ExceptionInterface } from '@app/domain/exceptions/exception.interface';
 import { LoggerInterface } from '@app/domain/logger/logger.interface';
 import { UpdateUserDTO } from '@app/presentation/dtos/user/update-user.dto';
-import { UsersMapper } from '@app/presentation/mappers/users/users.mapper';
 import { User } from '@prisma/client';
 
 export class UpdateUserUseCase {
@@ -24,6 +23,15 @@ export class UpdateUserUseCase {
       });
     }
 
+    const userActive = await this.usersRepo.findUserActive(userFound.id);
+
+    if (!userActive) {
+      this.logger.warn('DeleteUserUseCase', 'User deactivate');
+      this.exception.badRequestException({
+        message: 'User deactivate',
+      });
+    }
+
     const dataUpdated = {
       ...data,
       email: data?.email?.toLowerCase(),
@@ -35,6 +43,6 @@ export class UpdateUserUseCase {
       dataUpdated as User,
     );
 
-    return UsersMapper.toUser(userUpdate);
+    return userUpdate;
   }
 }

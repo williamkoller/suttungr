@@ -17,8 +17,8 @@ export class JwtAdapter implements JwtInterface {
       id: userModel.id,
       name: userModel.name,
       surname: userModel.surname,
-      createdAt: userModel.created_at,
-      updatedAt: userModel.updated_at,
+      createdAt: userModel.createdAt,
+      updatedAt: userModel.updatedAt,
       dateTime: new Date(),
     };
 

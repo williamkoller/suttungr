@@ -1,11 +1,9 @@
 import { UsersRepositoryInterface } from '@app/data/protocols/database/user/user.repository.interface';
 import { ExceptionInterface } from '@app/domain/exceptions/exception.interface';
 import { LoggerInterface } from '@app/domain/logger/logger.interface';
-import {
-  ResponseUserType,
-  UsersMapper,
-} from '@app/presentation/mappers/users/users.mapper';
+
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class FindUserByIdUseCase {
@@ -15,7 +13,7 @@ export class FindUserByIdUseCase {
     private readonly exception: ExceptionInterface,
   ) {}
 
-  async execute(id: number): Promise<ResponseUserType> {
+  async execute(id: number): Promise<User> {
     const verifyUserExists = await this.usersRepo.findById(id);
 
     if (!verifyUserExists) {
@@ -29,6 +27,6 @@ export class FindUserByIdUseCase {
       `verifyUserExists: ${JSON.stringify(verifyUserExists)}`,
     );
 
-    return UsersMapper.toUser(verifyUserExists);
+    return verifyUserExists;
   }
 }

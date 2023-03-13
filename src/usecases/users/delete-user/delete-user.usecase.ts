@@ -20,6 +20,15 @@ export class DeleteUserUseCase {
       });
     }
 
+    const userActive = await this.usersRepo.findUserActive(verifyUserExists.id);
+
+    if (!userActive) {
+      this.logger.warn('DeleteUserUseCase', 'User deactivate');
+      this.exception.badRequestException({
+        message: 'User deactivate',
+      });
+    }
+
     this.logger.log(
       `DeleteUserUseCase`,
       `deleted user by id: ${JSON.stringify(

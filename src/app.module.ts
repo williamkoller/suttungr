@@ -7,6 +7,7 @@ import { LoggerModule } from './infra/logger/logger.module';
 import { EnvironmentModule } from './infra/config/environment/environment.module';
 import { CryptographyModule } from './infra/cryptography/cryptography.module';
 import { AuthModule } from './infra/ioc/auth.module';
+import { RolesModule } from './infra/ioc/roles.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './infra/ioc/auth.module';
     EnvironmentModule,
     CryptographyModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [],

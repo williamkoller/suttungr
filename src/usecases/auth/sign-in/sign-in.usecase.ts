@@ -24,6 +24,15 @@ export class SignInUseCase {
       });
     }
 
+    const userActive = await this.usersRepo.findUserActive(user.id);
+
+    if (!userActive) {
+      this.logger.warn('SignInUseCase', 'User deactivate');
+      this.exception.badRequestException({
+        message: 'User deactivate',
+      });
+    }
+
     const userHasValid = await this.bcrypt.compare(
       data.password,
       user.password,
